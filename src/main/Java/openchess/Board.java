@@ -48,4 +48,13 @@ public class Board{
         board[7][6] = new Piece(Piece.Type.KNIGHT, Piece.Color.WHITE);
         board[7][7] = new Piece(Piece.Type.ROOK, Piece.Color.WHITE);
         System.out.println("Initial board setup:");
-    }}
+
+    }
+    public Piece getPiece(int x, int y) {
+    return board[y][x];
+}
+
+public void setPiece(int x, int y, Piece piece) {
+    board[y][x] = piece;
+}
+}
