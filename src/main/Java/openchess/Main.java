@@ -1,4 +1,4 @@
-package main.Java.openchess;
+package main.java.openchess;
 
 public class Main {
     public static void main(String[] args) {
