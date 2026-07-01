@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 package main.java.openchess;
 
 public class Board{ 
@@ -51,4 +50,4 @@ public class Board{
         board[7][7] = new Piece(Piece.Type.ROOK, Piece.Color.WHITE);
         System.out.println("Initial board setup:");
     }}
->>>>>>> parent of c48325e (Remove wrong Java folder (case fix))
+
