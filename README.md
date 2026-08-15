@@ -1,7 +1,8 @@
 # OpenChess
+
 Bold play starts with open code.
 
-Openchess is a modern  and lightweight chess project.
+Openchess is a modern and lightweight chess project.
 It will contain the following features:
 -Chess board ui
 -Legal Moves and Board validation
@@ -18,3 +19,6 @@ Installation:
 bash:
 git clone https://github.com/tech-with-dajen/OpenChess.git
 cd OpenChess
+
+Assets by RyiSnow  
+https://ryisnow.itch.io/

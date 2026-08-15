@@ -2,7 +2,7 @@
 package main.java.openchess;
 
 public class Board{ 
-        Piece[][] board = new Piece[8][8];
+        public Piece[][] board = new Piece[8][8];
 
         public  Board() {
             resetBoard();
@@ -49,5 +49,7 @@ public class Board{
         board[7][6] = new Piece(Piece.Type.KNIGHT, Piece.Color.WHITE);
         board[7][7] = new Piece(Piece.Type.ROOK, Piece.Color.WHITE);
         System.out.println("Initial board setup:");
-    }}
+    }
+
+}
 
