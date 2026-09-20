@@ -1,4 +1,3 @@
-
 package main.java.openchess;
 
 public class Board{ 
@@ -6,6 +5,13 @@ public class Board{
 
         public  Board() {
             resetBoard();
+        }
+
+        /** Creates an independent board array for testing a possible move. */
+        public Board(Board original) {
+            for (int y = 0; y < 8; y++) {
+                System.arraycopy(original.board[y], 0, board[y], 0, 8);
+            }
         }
 
         private void resetBoard() {
@@ -19,6 +25,7 @@ public class Board{
         board[0][5] = new Piece(Piece.Type.BISHOP, Piece.Color.BLACK);
         board[0][6] = new Piece(Piece.Type.KNIGHT, Piece.Color.BLACK);
         board[0][7] = new Piece(Piece.Type.ROOK, Piece.Color.BLACK);
+
         board[1][0] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
         board[1][1] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
         board[1][2] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);

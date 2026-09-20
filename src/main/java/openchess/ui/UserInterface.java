@@ -6,11 +6,13 @@ import java.awt.*;
 import main.java.openchess.Game;
 import main.java.openchess.Move;
 import main.java.openchess.Piece;
+import main.java.openchess.ChessAI;
 
 public class UserInterface {
 
     private static final PieceImageLoader pieceImageLoader = new PieceImageLoader();
     private static final Game game = new Game();
+    private static final ChessAI chessAI = new ChessAI();
 
     private static final JButton[][] buttons = new JButton[8][8];
 
@@ -63,7 +65,10 @@ public class UserInterface {
     private static void handleSquareClick(int x, int y) {
         if (selectedX == -1) {
             // Erster Klick: Nur ein Feld mit Figur auswählen.
-            if (game.board.board[y][x] != null) {
+            Piece piece = game.board.board[y][x];
+            boolean isCurrentPlayersPiece = piece != null
+                    && (game.whiteToMove == (piece.color == Piece.Color.WHITE));
+            if (isCurrentPlayersPiece) {
                 selectedX = x;
                 selectedY = y;
             }
@@ -77,9 +82,16 @@ public class UserInterface {
             return;
         }
 
-        // Zweiter Klick: Zug ausführen.
+        // Zweiter Klick: Den Zug ausführen und Schwarz antworten lassen.
         Move move = new Move(selectedX, selectedY, x, y);
-        game.makeMove(move);
+        boolean humanMoved = game.makeMove(move);
+
+        if (humanMoved && !game.whiteToMove) {
+            Move computerMove = chessAI.findRandomMove(game.board, Piece.Color.BLACK);
+            if (computerMove != null) {
+                game.makeMove(computerMove);
+            }
+        }
 
         selectedX = -1;
         selectedY = -1;

@@ -9,11 +9,17 @@ public class Game {
         board = new Board();
     }
 
-    public void makeMove(Move move) {
+    public boolean makeMove(Move move) {
+        Piece.Color currentColor = whiteToMove ? Piece.Color.WHITE : Piece.Color.BLACK;
+        if (!Rules.isLegalMove(board, move, currentColor)) {
+            return false;
+        }
+
         Piece p = board.board[move.fromY][move.fromX];
         board.board[move.toY][move.toX] = p;
         board.board[move.fromY][move.fromX] = null;
 
         whiteToMove = !whiteToMove;
+        return true;
     }
 }
