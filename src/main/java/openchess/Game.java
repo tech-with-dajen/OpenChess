@@ -1,5 +1,4 @@
 package main.java.openchess;
-
 public class Game {
 
     public Board board;

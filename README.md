@@ -20,5 +20,10 @@ bash:
 git clone https://github.com/tech-with-dajen/OpenChess.git
 cd OpenChess
 
+Run:
+cd Openchess
+cd src/main/java/openchess/ui
+java UserInterface.java
+
 Assets by RyiSnow  
 https://ryisnow.itch.io/
