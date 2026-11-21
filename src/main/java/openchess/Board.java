@@ -1,22 +1,29 @@
 package main.java.openchess;
 
-public class Board{ 
-        public Piece[][] board = new Piece[8][8];
+public class Board {
 
-        public  Board() {
-            resetBoard();
+    public Piece[][] board = new Piece[8][8];
+    private Move lastMove;
+
+    public Board() {
+        resetBoard();
+    }
+
+    /** Creates an independent board array for testing a possible move. */
+    public Board(Board original) {
+        for (int y = 0; y < 8; y++) {
+            System.arraycopy(original.board[y], 0, board[y], 0, 8);
         }
 
-        /** Creates an independent board array for testing a possible move. */
-        public Board(Board original) {
-            for (int y = 0; y < 8; y++) {
-                System.arraycopy(original.board[y], 0, board[y], 0, 8);
-            }
-        }
+        this.lastMove = original.lastMove;
+    }
 
-        private void resetBoard() {
-        //Board setup
-        
+    public Move getLastMove() {
+        return lastMove;
+    }
+
+    private void resetBoard() {
+        // Black pieces
         board[0][0] = new Piece(Piece.Type.ROOK, Piece.Color.BLACK);
         board[0][1] = new Piece(Piece.Type.KNIGHT, Piece.Color.BLACK);
         board[0][2] = new Piece(Piece.Type.BISHOP, Piece.Color.BLACK);
@@ -26,27 +33,22 @@ public class Board{
         board[0][6] = new Piece(Piece.Type.KNIGHT, Piece.Color.BLACK);
         board[0][7] = new Piece(Piece.Type.ROOK, Piece.Color.BLACK);
 
-        board[1][0] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
-        board[1][1] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
-        board[1][2] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
-        board[1][3] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
-        board[1][4] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
-        board[1][5] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
-        board[1][6] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
-        board[1][7] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
-        for (int i = 2; i < 6; i++) {
-            for (int j = 0; j < 8; j++) {
-                board[i][j] = null; // Empty squares
+        for (int x = 0; x < 8; x++) {
+            board[1][x] = new Piece(Piece.Type.PAWN, Piece.Color.BLACK);
+        }
+
+        // Empty middle rows
+        for (int y = 2; y < 6; y++) {
+            for (int x = 0; x < 8; x++) {
+                board[y][x] = null;
             }
         }
-        board[6][0] = new Piece(Piece.Type.PAWN, Piece.Color.WHITE);
-        board[6][1] = new Piece(Piece.Type.PAWN, Piece.Color.WHITE);
-        board[6][2] = new Piece(Piece.Type.PAWN, Piece.Color.WHITE);
-        board[6][3] = new Piece(Piece.Type.PAWN, Piece.Color.WHITE);
-        board[6][4] = new Piece(Piece.Type.PAWN, Piece.Color.WHITE);
-        board[6][5] = new Piece(Piece.Type.PAWN, Piece.Color.WHITE);
-        board[6][6] = new Piece(Piece.Type.PAWN, Piece.Color.WHITE);
-        board[6][7] = new Piece(Piece.Type.PAWN, Piece.Color.WHITE);
+
+        // White pieces
+        for (int x = 0; x < 8; x++) {
+            board[6][x] = new Piece(Piece.Type.PAWN, Piece.Color.WHITE);
+        }
+
         board[7][0] = new Piece(Piece.Type.ROOK, Piece.Color.WHITE);
         board[7][1] = new Piece(Piece.Type.KNIGHT, Piece.Color.WHITE);
         board[7][2] = new Piece(Piece.Type.BISHOP, Piece.Color.WHITE);
@@ -55,8 +57,35 @@ public class Board{
         board[7][5] = new Piece(Piece.Type.BISHOP, Piece.Color.WHITE);
         board[7][6] = new Piece(Piece.Type.KNIGHT, Piece.Color.WHITE);
         board[7][7] = new Piece(Piece.Type.ROOK, Piece.Color.WHITE);
-        System.out.println("Initial board setup:");
+
+        lastMove = null;
     }
 
-}
+    public boolean movePiece(Move move, Piece.Color currentPlayer) {
+        if (!Rules.isLegalMove(this, move, currentPlayer)) {
+            return false;
+        }
 
+        Piece movedPiece = board[move.fromY][move.fromX];
+        boolean enPassant = Rules.isEnPassantCapture(this, move);
+
+        // Regular move or normal capture.
+        board[move.toY][move.toX] = movedPiece;
+        board[move.fromY][move.fromX] = null;
+
+        // En passant captures the pawn beside the destination square.
+        if (enPassant) {
+            board[move.fromY][move.toX] = null;
+        }
+
+        // Automatically promote a pawn to a queen.
+        if (movedPiece.type == Piece.Type.PAWN
+                && (move.toY == 0 || move.toY == 7)) {
+            board[move.toY][move.toX] =
+                    new Piece(Piece.Type.QUEEN, movedPiece.color);
+        }
+
+        lastMove = move;
+        return true;
+    }
+}
